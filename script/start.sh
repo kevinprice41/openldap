@@ -58,7 +58,7 @@ EOF
 EOL
    
 
-    cat >>/etc/ldap/schema <<-EOL
+    cat >>/etc/ldap/schema/pwm.schema <<-EOL
 	attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.1
         	NAME 'pwmEventLog'
         	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
