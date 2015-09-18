@@ -19,46 +19,6 @@ slapd slapd/allow_ldap_v2 boolean false
 slapd slapd/no_configuration boolean false
 slapd slapd/dump_database select when needed
 EOF
-#Updated configuration to support pwm
-cat >>/etc/ldap/slapd.conf <<EOF
-index           cn eq
-access to attrs=userPassword,shadowLastChange
-	by dn="cn=admin,dc=domain,dc=com" write
-	by dn="cn=pwmadmin,dc=domain,dc=com" write
-	by anonymous auth
-	by self write
-	by * none
-access to dn.subtree="ou=Accounts,dc=domain,dc=com"
-	by dn="cn=admin,dc=domain,dc=com" write
-	by dn="cn=pwmadmin,dc=domain,dc=com" write
-	by anonymous auth
-	by self write
-	by * none
-access to dn.base="" by * read
-access to *
-	by dn="cn=admin,dc=domain,dc=com" write
-	by dn="cn=pwmadmin,dc=domain,dc=com" read
-	by * none
-EOF
-
-cat >>/etc/ldap/schema/pwm.schema <<EOF
-attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.1
-	NAME 'pwmEventLog'
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
-attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.2
-	NAME 'pwmResponseSet'
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
-attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.3
-	NAME 'pwmLastPwdUpdate'
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.24 )
-attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.4
-	NAME 'pwmGUID'
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
-objectclass ( 1.3.6.1.4.1.591242.1.2010.04.16.1
-	NAME 'pwmUser'
-	AUXILIARY
-	MAY ( pwmLastPwdUpdate $ pwmEventLog $ pwmResponseSet $ pwmGUID )
-EOF
 
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive slapd
 
