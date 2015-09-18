@@ -20,6 +20,21 @@ if [[ ! -f /etc/ldap/ldap.configured ]]; then
     PURGE_DB="${PURGE_DB:-false}"
     MOVE_OLD_DB="${MOVE_OLD_DB:-true}"
 
+    cat <<-EOF | debconf-set-selections
+	slapd slapd/no_configuration  boolean false
+	slapd slapd/password1         password $ADMIN_PASSWORD
+	slapd slapd/password2         password $ADMIN_PASSWORD
+	slapd shared/organization     string $ORGANIZATION
+	slapd slapd/domain            string $DOMAIN
+	slapd slapd/backend           select $BACKEND
+	slapd slapd/allow_ldap_v2     boolean $ALLOW_V2
+	slapd slapd/purge_database    boolean $PURGE_DB
+	slapd slapd/move_old_database boolean $MOVE_OLD_DB
+EOF
+
+   dpkg-reconfigure slapd >/tmp/slapd.reconfigure 2>&1
+   date +%s > /etc/ldap/ldap.configured
+   
     #Updated configuration to support pwm
     cat >>/etc/ldap/slapd.conf <<-EOL
 	index           cn eq
@@ -61,24 +76,7 @@ EOL
         	AUXILIARY
         	MAY ( pwmLastPwdUpdate $ pwmEventLog $ pwmResponseSet $ pwmGUID )
 EOL
-
-
-
-    cat <<-EOF | debconf-set-selections
-	slapd slapd/no_configuration  boolean false
-	slapd slapd/password1         password $ADMIN_PASSWORD
-	slapd slapd/password2         password $ADMIN_PASSWORD
-	slapd shared/organization     string $ORGANIZATION
-	slapd slapd/domain            string $DOMAIN
-	slapd slapd/backend           select $BACKEND
-	slapd slapd/allow_ldap_v2     boolean $ALLOW_V2
-	slapd slapd/purge_database    boolean $PURGE_DB
-	slapd slapd/move_old_database boolean $MOVE_OLD_DB
-EOF
-
-   dpkg-reconfigure slapd >/tmp/slapd.reconfigure 2>&1
-   date +%s > /etc/ldap/ldap.configured
-
+   
 fi
 
 exec slapd -h "ldap:/// ldapi:///" -u openldap -g openldap ${LDAP_OPTS:-} -d ${LDAP_DEBUG:-"stats"}
