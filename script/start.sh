@@ -107,15 +107,13 @@ cat >>/etc/ldap/base.ldif <<EOF
 dn: dc=example,dc=com
 objectClass: dcObject
 objectClass: organization
-o: thegeekstuff.com
-dc: thegeekstuff
+o: example.com
+dc: example
 dn: ou=Accounts,dc=example,dc=com
 objectClass: organizationalUnit
 objectClass: top
 ou: Accounts
 EOF
-
-  ldapadd -x -D "cn=admin,dc=example,dc=com" -w secret -f /etc/ldap/base.ldif
 
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive slapd
 
@@ -127,3 +125,4 @@ fi
 
 echo "Starting OpenLDAP"
 exec slapd -h "ldap:/// ldapi:///" -u openldap -g openldap ${LDAP_OPTS:-} -d ${LDAP_DEBUG:-"stats"}
+ldapadd -x -D "cn=admin,dc=example,dc=com" -w secret -f /etc/ldap/base.ldif
