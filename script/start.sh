@@ -22,21 +22,24 @@ EOF
 
 cat >>/etc/ldap/ldap.conf <<EOF
 index           cn eq
+
 access to attrs=userPassword,shadowLastChange
-        by dn="cn=admin,dc=${DOMAIN:-example.com},dc=com" write
-        by dn="cn=pwmadmin,dc=${DOMAIN:-example.com},dc=com" write
+        by dn="cn=admin,dc=${DOMAIN:-example},dc=com" write
+        by dn="cn=pwmadmin,dc=${DOMAIN:-example},dc=com" write
         by anonymous auth
         by self write
         by * none
-access to dn.subtree="ou=Accounts,dc=${DOMAIN:-example.com},dc=com"
-        by dn="cn=admin,dc=${DOMAIN:-example.com},dc=com" write
-        by dn="cn=pwmadmin,dc=${DOMAIN:-example.com},dc=com" write
+        
+access to dn.subtree="ou=Accounts,dc=${DOMAIN:-example},dc=com"
+        by dn="cn=admin,dc=${DOMAIN:-example},dc=com" write
+        by dn="cn=pwmadmin,dc=${DOMAIN:-example},dc=com" write
         by anonymous auth
         by self write
         by * none
+        
 access to *
-        by dn="cn=admin,dc=${DOMAIN:-example.com},dc=com" write
-        by dn="cn=pwmadmin,dc=${DOMAIN:-example.com},dc=com" read
+        by dn="cn=admin,dc=${DOMAIN:-example},dc=com" write
+        by dn="cn=pwmadmin,dc=${DOMAIN:-example},dc=com" read
         by * none
 EOF
 
