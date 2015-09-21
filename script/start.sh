@@ -73,8 +73,7 @@ attributetype ( 1.3.6.1.4.1.591242.2.2010.04.16.4
 objectclass ( 1.3.6.1.4.1.591242.1.2010.04.16.1
         NAME 'pwmUser'
         AUXILIARY
-        MAY ( pwmLastPwdUpdate $ pwmEventLog $ pwmResponseSet $
-   pwmGUID )
+        MAY ( pwmLastPwdUpdate $ pwmEventLog $ pwmResponseSet $ pwmGUID ))
 EOF
 
 
