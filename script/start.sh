@@ -124,5 +124,5 @@ else
 fi
 
 echo "Starting OpenLDAP"
-exec slapd -h "ldap:/// ldapi:///" -u openldap -g openldap ${LDAP_OPTS:-} -d ${LDAP_DEBUG:-"stats"}
+slapd -h "ldap:/// ldapi:///" -u openldap -g openldap ${LDAP_OPTS:-} -d ${LDAP_DEBUG:-"stats"}
 ldapadd -x -D "cn=admin,dc=example,dc=com" -w secret -f /etc/ldap/base.ldif
