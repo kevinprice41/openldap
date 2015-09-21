@@ -115,7 +115,7 @@ objectClass: top
 ou: Accounts
 EOF
 
-  ldapadd -x -W -D "cn=admin,dc=example,dc=com" -w secret -f /etc/ldap/base.ldif
+  ldapadd -x -D "cn=admin,dc=example,dc=com" -w secret -f /etc/ldap/base.ldif
 
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive slapd
 
